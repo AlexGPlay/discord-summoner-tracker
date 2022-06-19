@@ -8,6 +8,7 @@ const getLeaguesByAccountId = (accountId) => resolveFetchRequest(fetch(`https://
 const getMatchesByAccountId = (accountId) => resolveFetchRequest(fetch(`https://euw1.api.riotgames.com/lol/match/v4/matchlists/by-account/${accountId}`));
 const getSpectatorInfoByAccountId = (accountId) => resolveFetchRequest(fetch(`https://euw1.api.riotgames.com/lol/spectator/v4/active-games/by-summoner/${accountId}`));
 const getMatchInfoById = (matchId) => resolveFetchRequest(fetch(`https://euw1.api.riotgames.com/lol/match/v4/matches/${matchId}`));
+const getEntriesByName = (accountId) => resolveFetchRequest(fetch(`https://euw1.api.riotgames.com/lol/league/v4/entries/by-summoner/${accountId}`));
 
 const resolveFetchRequest = (request) => {
   return new Promise((resolve, reject) => {
@@ -23,5 +24,6 @@ module.exports = {
   getLeaguesByAccountId,
   getMatchesByAccountId,
   getSpectatorInfoByAccountId,
-  getMatchInfoById
+  getMatchInfoById,
+  getEntriesByName
 }

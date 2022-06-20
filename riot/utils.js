@@ -1,4 +1,4 @@
-const { getSummonerByName, getMatchesByAccountId, getSpectatorInfoByAccountId, getEntriesByName,getSummonerGames } = require('./api');
+const { getSummonerByName, getMatchesByAccountId, getSpectatorInfoByAccountId, getEntriesByName, getSummonerGames } = require('./api');
 
 const getMatchesBySummonerName = async (summonerName) => {
   const summonerInfo = await getSummonerByName(summonerName);
@@ -7,8 +7,7 @@ const getMatchesBySummonerName = async (summonerName) => {
 
 const isSummonerPlaying = async (summonerName) => {
   try {
-    const summonerInfo = await getSummonerByName(summonerName);
-    const spectatorInfo = await getSpectatorInfoByAccountId(summonerInfo.id);
+    const spectatorInfo = await getCurrentGame(summonerName);
     return !!spectatorInfo?.gameId;
   }
   catch (e) {
@@ -17,22 +16,31 @@ const isSummonerPlaying = async (summonerName) => {
   }
 }
 
+const getCurrentGame = async (summonerName) => {
+  try {
+    const summonerInfo = await getSummonerByName(summonerName);
+    return getSpectatorInfoByAccountId(summonerInfo.id);
+  }
+  catch (e) {
+    console.error(e);
+    return {};
+  }
+}
+
 const getSummonerRank = async (summonerName) => {
   try {
     const summonerInfo = await getSummonerByName(summonerName);
-    const entries = await getEntriesByName(summonerInfo.id);
-    return entries.map(entry => 
-      `${entry.queueType}: ${entry.tier} ${entry.rank} ${entry.leaguePoints}LP \n\t ${entry.wins}W/${entry.losses}L)\n`).join('');
+    return getEntriesByName(summonerInfo.id);
   } catch (e) {
     console.error(e);
     return false;
   }
 }
 
-const getGames = async (summonerName) => {
+const getGames = async (summonerName, start = 0, count = 50) => {
   try {
     const summonerInfo = await getSummonerByName(summonerName);
-    const matches = await getSummonerGames(summonerInfo.puuid,0,50);
+    const matches = await getSummonerGames(summonerInfo.puuid, start, count);
     return matches;
   } catch (e) {
     console.error(e);
@@ -45,5 +53,6 @@ module.exports = {
   getMatchesBySummonerName,
   isSummonerPlaying,
   getSummonerRank,
-  getGames
+  getGames,
+  getCurrentGame
 }

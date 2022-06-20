@@ -1,14 +1,11 @@
-const { isSummonerPlaying, getSummonerRank, getGames } = require('./riot/utils');
+const { setupDiscord } = require('./discord/setup');
 
-(async () => {
-  const summonerName = "PGenius";
-  const isPlaying = await isSummonerPlaying(summonerName);
-  console.log(isPlaying);
+// const { updateLocalSummonerInfo } = require('./riot/summoner');
 
-  const rank = await getSummonerRank(summonerName);
-  console.log(rank)
+// (async () => {
+//   const summonerName = "Raistm";
+//   let events = await updateLocalSummonerInfo(summonerName);
+//   console.log(events);
+// })();
 
-  const games = await getGames(summonerName);
-  console.log(games);
-
-})();
+setupDiscord();

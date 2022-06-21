@@ -1,19 +1,18 @@
-const client = require('./client');
+const { startFollow, updateOnce } = require("./actions/follow");
+const client = require("./client");
 
 function setupDiscord() {
-
-  client.on('ready', () => {
+  client.on("ready", () => {
     console.log(`Logged in as ${client.user.tag}!`);
     client.user.setActivity("hogos", { type: "WATCHING" });
   });
 
-  client.on("message", async (msg) => {
-    if (msg.content.startsWith("!follow_summoner"))
-      console.log(msg.content);
+  client.on("messageCreate", async (msg) => {
+    if (msg.content.startsWith("!follow_summoner")) startFollow(msg);
+    else if (msg.content.startsWith("!update_summoner")) updateOnce(msg);
   });
-
 }
 
 module.exports = {
-  setupDiscord
-}
+  setupDiscord,
+};

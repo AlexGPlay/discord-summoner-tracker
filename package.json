@@ -4,13 +4,23 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "dev": "nodemon index.js"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "bull": "^4.8.4",
     "discord.js": "^13.8.0",
     "node-fetch": "^2.6.7"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.16"
+  },
+  "nodemonConfig": {
+    "ignore": [
+      "tmp/**/*"
+    ],
+    "delay": 2500
   }
 }

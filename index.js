@@ -1,11 +1,9 @@
-const { setupDiscord } = require('./discord/setup');
-
-// const { updateLocalSummonerInfo } = require('./riot/summoner');
-
-// (async () => {
-//   const summonerName = "Raistm";
-//   let events = await updateLocalSummonerInfo(summonerName);
-//   console.log(events);
-// })();
+const { setupDiscord } = require("./discord/setup");
+const { setupQueue: setupObserversQueue } = require("./queues/addObserverQueue");
+const { setupQueue: setupRemoveQueue } = require("./queues/removeObserverQueue");
+const { setupQueue: setupSummonerQueue } = require("./queues/trackSummonerQueue");
 
 setupDiscord();
+setupObserversQueue();
+setupRemoveQueue();
+setupSummonerQueue();

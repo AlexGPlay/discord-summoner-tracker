@@ -1,4 +1,4 @@
-const { startFollow, updateOnce } = require("./actions/follow");
+const { startFollow, updateOnce, stopFollow } = require("./actions/follow");
 const client = require("./client");
 
 function setupDiscord() {
@@ -9,6 +9,7 @@ function setupDiscord() {
 
   client.on("messageCreate", async (msg) => {
     if (msg.content.startsWith("!follow_summoner")) startFollow(msg);
+    else if (msg.content.startsWith("!unfollow_summoner")) stopFollow(msg);
     else if (msg.content.startsWith("!update_summoner")) updateOnce(msg);
   });
 }

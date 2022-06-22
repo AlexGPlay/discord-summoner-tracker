@@ -41,9 +41,16 @@ function getLocalSummonerInfo(summonerName) {
 
 function saveInfoFromServer(summonerName, summonerInfo) {
   fs.mkdirSync("./tmp/summoners", { recursive: true });
+  const file = `./tmp/summoners/${encodeURI(summonerName)}.json`;
+
+  let currentData = {};
+  if (fs.existsSync(file)) currentData = JSON.parse(fs.readFileSync(file));
+
   fs.writeFileSync(
-    `./tmp/summoners/${encodeURI(summonerName)}.json`,
+    file,
     JSON.stringify({
+      observers: {},
+      ...currentData,
       isPlaying: summonerInfo.isPlaying,
       lastGames: summonerInfo.lastGames,
       rank: summonerInfo.rank,
@@ -51,11 +58,39 @@ function saveInfoFromServer(summonerName, summonerInfo) {
   );
 }
 
+function addObserver(summonerName, channelId) {
+  let currentData = {
+    observers: {},
+  };
+
+  const file = `./tmp/summoners/${encodeURI(summonerName)}.json`;
+  if (fs.existsSync(file)) currentData = JSON.parse(fs.readFileSync(file));
+
+  if (!!currentData.observers[channelId]) return;
+  if (Object.keys(currentData.observers).length === 0) {
+    // ENCOLAR OBSERVAÇAO
+  }
+
+  currentData.observers[channelId] = { lastMessage: null };
+
+  fs.writeFileSync(file, JSON.stringify(currentData));
+}
+
+function removeObserver(summonerName, channelId) {
+  const file = `./tmp/summoners/${encodeURI(summonerName)}.json`;
+  if (!fs.existsSync(file)) return;
+
+  let currentData = JSON.parse(fs.readFileSync(file));
+  delete currentData.observers[channelId];
+
+  fs.writeFileSync(file, JSON.stringify(currentData));
+}
+
 async function updateLocalSummonerInfo(summonerName) {
   const summonerInfo = await getSummonerInfo(summonerName);
   const localSummonerInfo = getLocalSummonerInfo(summonerName);
 
-  if (!localSummonerInfo) {
+  if (!localSummonerInfo || Object.keys(localSummonerInfo).length < 2) {
     saveInfoFromServer(summonerName, summonerInfo);
     return [];
   }
@@ -115,4 +150,6 @@ async function updateLocalSummonerInfo(summonerName) {
 
 module.exports = {
   updateLocalSummonerInfo,
+  addObserver,
+  removeObserver,
 };

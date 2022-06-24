@@ -4,6 +4,7 @@ const {
   getSpectatorInfoByAccountId,
   getEntriesByName,
   getSummonerGames,
+  getChampions,
 } = require("./api");
 
 const getMatchesBySummonerName = async (summonerName) => {
@@ -52,10 +53,16 @@ const getGames = async (summonerName, start = 0, count = 50) => {
   }
 };
 
+const getChampionById = async (championId) => {
+  const champions = await getChampions();
+  return Object.values(champions.data).find((value) => value.key == championId);
+};
+
 module.exports = {
   getMatchesBySummonerName,
   isSummonerPlaying,
   getSummonerRank,
   getGames,
   getCurrentGame,
+  getChampionById,
 };

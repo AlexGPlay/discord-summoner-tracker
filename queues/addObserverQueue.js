@@ -1,11 +1,13 @@
 const Queue = require("bull");
 const { addObserver } = require("../riot/summoner");
+const { addJob: addTrackSummonerJob } = require("../queues/trackSummonerQueue");
 
 const addObserverQueue = new Queue("addObserver");
 
 function setupQueue() {
   addObserverQueue.process(({ data: { channelId, summonerName } }) => {
-    addObserver(summonerName, channelId);
+    let observer = addObserver(summonerName, channelId);
+    if (observer) addTrackSummonerJob({ summonerName, repeat: true });
   });
 }
 

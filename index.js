@@ -10,7 +10,7 @@ const {
   trackSummonerQueue,
 } = require("./queues/trackSummonerQueue");
 
-// setupDiscord();
+setupDiscord();
 setupObserversQueue();
 setupRemoveQueue();
 setupSummonerQueue();

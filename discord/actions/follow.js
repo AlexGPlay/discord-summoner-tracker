@@ -1,6 +1,5 @@
 const { addJob: addObserverQueueJob } = require("../../queues/addObserverQueue");
 const { addJob: addRemoveObserverQueueJob } = require("../../queues/removeObserverQueue");
-const { addJob: addTrackSummonerJob } = require('../../queues/trackSummonerQueue');
 
 async function startFollow(msg) {
   const name = msg.content.replace("!follow_summoner ", "");

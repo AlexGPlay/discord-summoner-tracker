@@ -5,6 +5,7 @@ const {
   getCurrentGame,
   getChampionById,
 } = require("./utils");
+
 const { getMatchInfoById } = require("./api");
 
 const { generateSpectatorFile } = require("./spectator");
@@ -62,18 +63,18 @@ function addObserver(summonerName, channelId) {
   let currentData = {
     observers: {},
   };
-
+  let createObserver = false;
   const file = `./tmp/summoners/${encodeURI(summonerName)}.json`;
   if (fs.existsSync(file)) currentData = JSON.parse(fs.readFileSync(file));
 
   if (!!currentData.observers[channelId]) return;
-  if (Object.keys(currentData.observers).length === 0) {
-    // ENCOLAR OBSERVAÇAO
-  }
+  if (Object.keys(currentData.observers).length === 0) createObserver = true;
 
   currentData.observers[channelId] = { lastMessage: null };
-
+  fs.mkdirSync("./tmp/summoners", { recursive: true });
   fs.writeFileSync(file, JSON.stringify(currentData));
+
+  return createObserver;
 }
 
 function removeObserver(summonerName, channelId) {

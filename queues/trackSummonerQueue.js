@@ -1,5 +1,4 @@
 const Queue = require("bull");
-
 const fs = require("fs");
 const { updateLocalSummonerInfo } = require("../riot/summoner");
 const { formatEvents } = require("../discord/formatEvents");

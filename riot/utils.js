@@ -1,31 +1,35 @@
-const { getSummonerByName, getMatchesByAccountId, getSpectatorInfoByAccountId, getEntriesByName, getSummonerGames } = require('./api');
+const {
+  getSummonerByName,
+  getMatchesByAccountId,
+  getSpectatorInfoByAccountId,
+  getEntriesByName,
+  getSummonerGames,
+} = require("./api");
 
 const getMatchesBySummonerName = async (summonerName) => {
   const summonerInfo = await getSummonerByName(summonerName);
   return getMatchesByAccountId(summonerInfo.accountId);
-}
+};
 
 const isSummonerPlaying = async (summonerName) => {
   try {
     const spectatorInfo = await getCurrentGame(summonerName);
     return !!spectatorInfo?.gameId;
-  }
-  catch (e) {
+  } catch (e) {
     console.error(e);
     return false;
   }
-}
+};
 
 const getCurrentGame = async (summonerName) => {
   try {
     const summonerInfo = await getSummonerByName(summonerName);
     return getSpectatorInfoByAccountId(summonerInfo.id);
-  }
-  catch (e) {
+  } catch (e) {
     console.error(e);
     return {};
   }
-}
+};
 
 const getSummonerRank = async (summonerName) => {
   try {
@@ -35,7 +39,7 @@ const getSummonerRank = async (summonerName) => {
     console.error(e);
     return false;
   }
-}
+};
 
 const getGames = async (summonerName, start = 0, count = 50) => {
   try {
@@ -46,13 +50,12 @@ const getGames = async (summonerName, start = 0, count = 50) => {
     console.error(e);
     return false;
   }
-
-}
+};
 
 module.exports = {
   getMatchesBySummonerName,
   isSummonerPlaying,
   getSummonerRank,
   getGames,
-  getCurrentGame
-}
+  getCurrentGame,
+};

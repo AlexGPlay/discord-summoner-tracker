@@ -1,4 +1,4 @@
-const { setupDiscord } = require('./discord/setup');
+const { setupDiscord } = require("./discord/setup");
 
 // const { updateLocalSummonerInfo } = require('./riot/summoner');
 

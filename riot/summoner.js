@@ -20,10 +20,12 @@ async function getSummonerInfo(summonerName) {
 
   if (isPlaying) {
     currentGameInfo = await getCurrentGame(summonerName);
-    spectatorFile = generateSpectatorFile({
-      gameId: currentGameInfo.gameId,
-      observerKey: currentGameInfo.observers.encryptionKey,
-    });
+    if (currentGameInfo?.observers?.encryptionKey) {
+      spectatorFile = generateSpectatorFile({
+        gameId: currentGameInfo.gameId,
+        observerKey: currentGameInfo?.observers?.encryptionKey,
+      });
+    }
   }
 
   return {

@@ -35,8 +35,10 @@ async function trackSummonerFunction({ summonerName }) {
   if (!fs.existsSync(`./tmp/summoners/${summonerName}.json`)) return;
   const observers = JSON.parse(fs.readFileSync(`./tmp/summoners/${summonerName}.json`)).observers;
   const events = await updateLocalSummonerInfo(summonerName);
-  const formattedEvents = formatEvents(events).filter(Boolean);
+  let formattedEvents = await formatEvents(events);
+  formattedEvents = formattedEvents.filter(Boolean);
 
+  //Si empieza partida
   for (const observer of Object.keys(observers)) {
     const channel = await client.channels.fetch(observer);
     for (const formattedEvt of formattedEvents) await channel.send({ embeds: [formattedEvt] });

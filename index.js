@@ -1,6 +1,7 @@
 const { setupDiscord } = require("./discord/setup");
 const { startExpressServer } = require("./web/board");
 const { setupQueue: setupObserversQueue, addObserverQueue } = require("./queues/addObserverQueue");
+
 const {
   setupQueue: setupRemoveQueue,
   removeObserverQueue,

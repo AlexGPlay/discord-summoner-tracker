@@ -7,6 +7,9 @@ const fetch = (url, params) =>
     headers: { "X-Riot-Token": riotApiKey, ...(params?.headers || {}) },
   });
 
+const getDDragonVersion = () =>
+  resolveFetchRequest(fetch("https://ddragon.leagueoflegends.com/api/versions.json"));
+
 const getSummonerByName = (name) =>
   resolveFetchRequest(
     fetch(`https://euw1.api.riotgames.com/lol/summoner/v4/summoners/by-name/${name}`)
@@ -43,6 +46,14 @@ const getChampions = () =>
     fetch("http://ddragon.leagueoflegends.com/cdn/12.11.1/data/en_US/champion.json")
   );
 
+const getChampionIcon = (championId) => {
+  resolveFetchRequest(
+    fetch(
+      `https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/${championId}.png`
+    )
+  );
+};
+
 const resolveFetchRequest = (request) => {
   return new Promise((resolve, reject) => {
     request
@@ -53,6 +64,7 @@ const resolveFetchRequest = (request) => {
 };
 
 module.exports = {
+  getChampionIcon,
   getSummonerByName,
   getLeaguesByAccountId,
   getMatchesByAccountId,
@@ -61,4 +73,5 @@ module.exports = {
   getEntriesByName,
   getSummonerGames,
   getChampions,
+  getDDragonVersion,
 };

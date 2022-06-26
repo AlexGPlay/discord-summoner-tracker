@@ -1,3 +1,6 @@
+const { MessageEmbed } = require("discord.js");
+const fs = require("fs");
+
 const FORMAT_TYPE_FN = {
   "start-playing": formatStartPlaying,
   "new-rank": formatNewRank,
@@ -11,26 +14,55 @@ function formatEvents(events) {
 
 // { type: 'start-playing', summoner: summonerName }
 function formatStartPlaying(evt) {
-  return `${evt.summoner} acaba de empezar a jugar una partida con ${evt.participantInfo.champion.name}`;
+  return new MessageEmbed()
+    .setColor("#0099ff")
+    .setTitle(`${evt.summoner} - Partida empezada`)
+    .setDescription(`Jugando con ${evt.participantInfo.champion.name}`)
+    .setThumbnail(
+      `http://ddragon.leagueoflegends.com/cdn/12.12.1/img/champion/${evt.participantInfo.champion.image.full}`
+    );
 }
 
 // { type: 'new-rank', summoner: summonerName, rank: Rank }
 function formatNewRank(evt) {
-  return `${evt.summoner} acaba de posicionarse en el modo ${evt.rank.queueType} ${evt.rank.tier} ${evt.rank.rank}`;
+  return new MessageEmbed()
+    .setColor("#0099ff")
+    .setTitle(`${evt.summoner} - Nuevo rango`)
+    .setDescription(`Se ha posicionado en ${evt.rank.queueType}`)
+    .addFields({ name: "Posicionado en", value: `${evt.rank.tier} ${evt.rank.rank}` })
+    .setThumbnail(
+      `https://opgg-static.akamaized.net/images/medals_new/${evt.to.tier.toLowerCase()}.png`
+    );
 }
 
 // { type: 'rank-change', summoner: summonerName, from: Rank, to: Rank }
 function formatRankChange(evt) {
-  return `${evt.summoner} acaba de cambiar de liga en el modo ${evt.to.queueType}, de ser ${evt.from.tier} ${evt.from.rank} ha pasado a ser ${evt.to.tier} ${evt.to.rank}`;
+  return new MessageEmbed()
+    .setColor("#0099ff")
+    .setTitle(`${evt.summoner} - Cambio de rango`)
+    .setDescription(`Ha cambiado de rango en ${evt.to.queueType}`)
+    .addFields({
+      name: "Promoted/Demoted",
+      value: `${evt.from.tier} ${evt.from.rank} => ${evt.to.tier} ${evt.to.rank}`,
+    })
+    .setThumbnail(
+      `https://opgg-static.akamaized.net/images/medals_new/${evt.to.tier.toLowerCase()}.png`
+    );
 }
 
 // { type: 'finished-playing', summoner: summonerName, matchId: matchId, summonerData: SummonerData }
 function formatFinishedPlaying(evt) {
-  return `${evt.summoner} acaba de ${evt.summonerData.win ? "GANAR" : "PERDER"} una partida de ${
-    evt.summonerData.teamPosition
-  } con ${evt.summonerData.championName} y ha quedado ${evt.summonerData.kills}/${
-    evt.summonerData.deaths
-  }/${evt.summonerData.assists}`;
+  return new MessageEmbed()
+    .setColor(evt.summonerData.win ? "#32a852" : "#b35050")
+    .setTitle(`${evt.summoner} - ${evt.summonerData.win ? "VICTORIA" : "DERROTA"}`)
+    .setDescription(`Partida terminada con ${evt.summonerData.champion.name}`)
+    .addFields({
+      name: "Puntuación (K/D/A)",
+      value: `${evt.summonerData.kills}/${evt.summonerData.deaths}/${evt.summonerData.assists}`,
+    })
+    .setThumbnail(
+      `http://ddragon.leagueoflegends.com/cdn/12.12.1/img/champion/${evt.summonerData.champion.image.full}`
+    );
 }
 
 module.exports = {

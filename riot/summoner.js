@@ -128,23 +128,27 @@ async function updateLocalSummonerInfo(summonerName) {
 
   const alreadyPlayedGamesDifference = summonerInfo.lastGames.filter(
     (game) => !localSummonerInfo.lastGames.includes(game)
-  );
+  ).reverse();
   if (alreadyPlayedGamesDifference.length > 0) {
     const requestedGames = await Promise.all(
       alreadyPlayedGamesDifference.map((game) => getMatchInfoById(game))
     );
-    requestedGames.forEach((game) => {
+
+    for (const game of requestedGames) {
       const summonerData = game.info.participants.find(
         (participant) =>
           participant.summonerName.trim().toLowerCase() === summonerName.trim().toLowerCase()
       );
+
+      const championInfo = await getChampionById(summonerData.championId);
+
       events.push({
         type: "finished-playing",
         summoner: summonerName,
         matchId: game.metadata.matchId,
-        summonerData,
+        summonerData: { ...summonerData, champion: championInfo },
       });
-    });
+    }
   }
 
   saveInfoFromServer(summonerName, summonerInfo);

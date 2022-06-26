@@ -1,5 +1,5 @@
 const { MessageEmbed } = require("discord.js");
-const fs = require("fs");
+const i18next = require("i18next");
 
 const FORMAT_TYPE_FN = {
   "start-playing": formatStartPlaying,
@@ -16,8 +16,12 @@ function formatEvents(events) {
 function formatStartPlaying(evt) {
   return new MessageEmbed()
     .setColor("#0099ff")
-    .setTitle(`${evt.summoner} - Partida empezada`)
-    .setDescription(`Jugando con ${evt.participantInfo.champion.name}`)
+    .setTitle(i18next.t("events.startPlaying.title", { summonerName: evt.summoner }))
+    .setDescription(
+      i18next.t("events.startPlaying.description", {
+        championName: evt.participantInfo.champion.name,
+      })
+    )
     .setThumbnail(
       `http://ddragon.leagueoflegends.com/cdn/12.12.1/img/champion/${evt.participantInfo.champion.image.full}`
     );
@@ -27,9 +31,12 @@ function formatStartPlaying(evt) {
 function formatNewRank(evt) {
   return new MessageEmbed()
     .setColor("#0099ff")
-    .setTitle(`${evt.summoner} - Nuevo rango`)
-    .setDescription(`Se ha posicionado en ${evt.rank.queueType}`)
-    .addFields({ name: "Posicionado en", value: `${evt.rank.tier} ${evt.rank.rank}` })
+    .setTitle(i18next.t("events.newRank.title", { summonerName: evt.summoner }))
+    .setDescription(i18next.t("events.newRank.description", { queueType: evt.rank.queueType }))
+    .addFields({
+      name: i18next.t("events.newRank.field1.name"),
+      value: `${evt.rank.tier} ${evt.rank.rank}`,
+    })
     .setThumbnail(
       `https://opgg-static.akamaized.net/images/medals_new/${evt.to.tier.toLowerCase()}.png`
     );
@@ -39,11 +46,18 @@ function formatNewRank(evt) {
 function formatRankChange(evt) {
   return new MessageEmbed()
     .setColor("#0099ff")
-    .setTitle(`${evt.summoner} - Cambio de rango`)
-    .setDescription(`Ha cambiado de rango en ${evt.to.queueType}`)
+    .setTitle(i18next.t("events.rankChange.title", { summonerName: evt.summoner }))
+    .setDescription(
+      i18next.t("events.rankChange.description", {
+        queueType: i18next.t(`queue.${evt.to.queueType}`),
+      })
+    )
     .addFields({
-      name: "Promoted/Demoted",
-      value: `${evt.from.tier} ${evt.from.rank} => ${evt.to.tier} ${evt.to.rank}`,
+      name: i18next.t("events.rankChange.field1.name"),
+      value: i18next.t("events.rankChange.field1.value.name", {
+        from: `${evt.from.tier} ${evt.from.rank}`,
+        to: `${evt.to.tier} ${evt.to.rank}`,
+      }),
     })
     .setThumbnail(
       `https://opgg-static.akamaized.net/images/medals_new/${evt.to.tier.toLowerCase()}.png`
@@ -54,11 +68,22 @@ function formatRankChange(evt) {
 function formatFinishedPlaying(evt) {
   return new MessageEmbed()
     .setColor(evt.summonerData.win ? "#32a852" : "#b35050")
-    .setTitle(`${evt.summoner} - ${evt.summonerData.win ? "VICTORIA" : "DERROTA"}`)
-    .setDescription(`Partida terminada con ${evt.summonerData.champion.name}`)
+    .setTitle(
+      i18next.t("events.finishPlaying.title", {
+        context: evt.summonerData.win ? "win" : "lose",
+        summonerName: evt.summoner,
+      })
+    )
+    .setDescription(
+      i18next.t("events.finishPlaying.description", { championName: evt.summonerData.championName })
+    )
     .addFields({
-      name: "Puntuación (K/D/A)",
-      value: `${evt.summonerData.kills}/${evt.summonerData.deaths}/${evt.summonerData.assists}`,
+      name: i18next.t("events.finishPlaying.field1.name"),
+      value: i18next.t("events.finishPlaying.field1.value", {
+        kills: evt.summonerData.kills,
+        deaths: evt.summonerData.deaths,
+        assists: evt.summonerData.assists,
+      }),
     })
     .setThumbnail(
       `http://ddragon.leagueoflegends.com/cdn/12.12.1/img/champion/${evt.summonerData.champion.image.full}`

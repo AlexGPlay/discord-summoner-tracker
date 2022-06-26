@@ -1,0 +1,37 @@
+{
+  "events": {
+    "startPlaying": {
+      "title": "{{summonerName}} - Partida empezada",
+      "description": "Jugando con {{championName}}"
+    },
+    "newRank": {
+      "title": "{{summonerName}} - Nuevo rango",
+      "description": "Se ha posicionado en {{queueType}}",
+      "field1": {
+        "name": "Posicionado en"
+      }
+    },
+    "rankChange": {
+      "title": "{{summonerName}} - Cambio de rango",
+      "description": "Ha cambiado de rango en {{queueType}}",
+      "field1": {
+        "name": "Promoted/Demoted",
+        "value": "{{from}} ⇒ {{to}}"
+      }
+    },
+    "finishPlaying": {
+      "title_win": "{{summonerName}} - Victoria",
+      "title_lose": "{{summonerName}} - Derrota",
+      "description": "Partida terminada con {{championName}}",
+      "field1": {
+        "name": "Puntuación (K/D/A)",
+        "value": "{{kills}}/{{deaths}}/{{assists}}"
+      }
+    }
+  },
+  "queue": {
+    "RANKED_FLEX_SR": "Flex",
+    "RANKED_SOLO_5x5": "SoloQ",
+    "RANKED_TFT_DOUBLE_UP": "TFT Double UP"
+  }
+}

@@ -2,6 +2,22 @@ const { addJob: addObserverQueueJob } = require("../../queues/addObserverQueue")
 const { addJob: addRemoveObserverQueueJob } = require("../../queues/removeObserverQueue");
 const { addJob: addTrackSummonerJob } = require("../../queues/trackSummonerQueue");
 
+async function startFollowCommand(interaction) {
+  await interaction.reply(`Started tracking the progress of ${interaction.options.data[0].value}`);
+  addObserverQueueJob({
+    channelId: interaction.channelId,
+    summonerName: interaction.options.data[0].value,
+  });
+}
+
+async function stopFollowCommand(interaction) {
+  await interaction.reply(`Stopped tracking the progress of ${interaction.options.data[0].value}`);
+  addRemoveObserverQueueJob({
+    channelId: interaction.channelId,
+    summonerName: interaction.options.data[0].value,
+  });
+}
+
 async function startFollow(msg) {
   const name = msg.content.replace("!follow_summoner ", "");
   await msg.reply(`Started tracking the progress of ${name}`);
@@ -21,6 +37,8 @@ async function updateOnce(msg) {
 }
 
 module.exports = {
+  startFollowCommand,
+  stopFollowCommand,
   startFollow,
   stopFollow,
   updateOnce,

@@ -59,7 +59,7 @@ function formatRankChange(evt) {
     )
     .addFields({
       name: i18next.t("events.rankChange.field1.name"),
-      value: i18next.t("events.rankChange.field1.value.name", {
+      value: i18next.t("events.rankChange.field1.value", {
         from: `${evt.from.tier} ${evt.from.rank}`,
         to: `${evt.to.tier} ${evt.to.rank}`,
       }),
